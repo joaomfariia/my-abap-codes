@@ -7,9 +7,9 @@ REPORT zbapi_extension.
 
 DATA p_ebeln LIKE bapimepoheader-po_number VALUE '4500000000'.
 
-DATA: wa_mepoheader  LIKE bapi_te_mepoheader,       " purchase order h. - table extension
-      wa_mepoheaderx LIKE bapi_te_mepoheaderx,      " whats being changed - table extension
-      it_return      TYPE TABLE OF bapiret2 WITH HEADER LINE.
+DATA: wa_mepoheader  LIKE bapi_te_mepoheader,                 " purchase order h. - table extension
+      wa_mepoheaderx LIKE bapi_te_mepoheaderx,                " whats being changed - table extension
+      it_return      TYPE TABLE OF bapiret2 WITH HEADER LINE. " bapi return messages
 
 DATA: it_poitem  TYPE bapimepoitem_tp,
       it_poitemx TYPE bapimepoitemx_tp.
@@ -44,11 +44,11 @@ APPEND INITIAL LINE TO it_poitemx ASSIGNING <fs_poitemx>.
 *-----------------------------------------------------------*
 * FIELD EXTENSION
 *-----------------------------------------------------------*
-wa_extensionin-structure = 'BAPI_TE_MEPOHEADER'.
-wa_extensionin-valuepart1 = wa_mepoheader.        " estrutura do pedido
+wa_extensionin-structure = 'BAPI_TE_MEPOHEADER'.  " extension structure
+wa_extensionin-valuepart1 = wa_mepoheader.
 APPEND wa_extensionin.
 
-wa_extensionin-structure = 'BAPI_TE_MEPOHEADERX'.
+wa_extensionin-structure = 'BAPI_TE_MEPOHEADERX'. " whats being changed
 wa_extensionin-valuepart1 = wa_mepoheaderx.
 APPEND wa_extensionin.
 
@@ -75,8 +75,11 @@ IF sy-subrc NE 0.
     MESSAGE |P.O { p_ebeln } successfully changed!| TYPE 'S' DISPLAY LIKE 'S'.
 
   ELSE.
-    WRITE: / it_return-message.
+    WRITE: / it_return-message. " Abend message
 
   ENDIF.
+
+ELSE.
+  WRITE: / it_return-message. " Error message
 
 ENDIF.

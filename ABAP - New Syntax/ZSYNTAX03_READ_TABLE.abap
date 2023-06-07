@@ -17,7 +17,9 @@ SELECT FROM zemployee
 *WRITE: 'Index 1: ', ls_emp.
 *ULINE.
 
-" Way 1
+*==================================================================
+* WAY 1 - Inline
+*==================================================================
 TRY.
 
     DATA(ls_emp) = gt_emp[ zempid = '1' zempname = 'JOÃO PEDRO' zemprole = 'DEVELOPER' ].
@@ -29,7 +31,9 @@ TRY.
 
 ENDTRY.
 
-" Way 2
+*==================================================================
+* WAY 2 - line_exists with exception
+*==================================================================
 TRY.
 
     IF line_exists( gt_emp[ zempid = '2' zempname = 'EMPLOYEE2' zemprole = 'MANAGER' ] ).
@@ -42,7 +46,9 @@ TRY.
 
 ENDTRY.
 
-" Way 3
+*==================================================================
+* WAY 3 - line_exists w/o exception
+*==================================================================
 DATA(lv_index) = line_index( gt_emp[ zempid = '3' zempname = 'EMPLOYEE3' zemprole = 'TECH LEADER' ] ).
 
 IF lv_index > 0.
@@ -54,6 +60,8 @@ ELSE.
 
 ENDIF.
 
-" Way 4
-" The OPTIONAL keyword prevents a dump
+*==================================================================
+* WAY 4 - Value operator
+*==================================================================
+** The OPTIONAL keyword prevents a dump
 DATA(ls_emp3) = VALUE #( gt_emp[ zempid = '99' zempname = 'EMPLOYEE4' zemprole = 'SUPERVISOR' ] OPTIONAL ).
