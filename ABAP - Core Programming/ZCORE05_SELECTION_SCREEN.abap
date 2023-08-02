@@ -7,7 +7,7 @@ REPORT zcore05_selection_screen.
 
 " Workflow: abap program -> initialization -> at selection-screen output -> selection-screen
 
-DATA: result TYPE i.
+DATA: result TYPE p LENGTH 6 DECIMALS 2.
 
 SELECTION-SCREEN BEGIN OF BLOCK bl1 WITH FRAME TITLE TEXT-001. " text-symbol (press F5)
 
@@ -63,7 +63,10 @@ START-OF-SELECTION.
     WRITE:/ 'Product is:', result.
 
   ELSEIF p_div = 'X'.
-    result = p_x / p_y.
-    WRITE:/ 'Division is:', result.
-
+    IF p_y EQ 0.
+      MESSAGE 'Divison by 0 impossible!' TYPE 'I' DISPLAY LIKE 'E'.
+    ELSE.
+      result = p_x / p_y.
+      WRITE:/ 'Division is:', result.
+    ENDIF.
   ENDIF.

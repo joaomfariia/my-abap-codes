@@ -54,3 +54,13 @@ gv_str = 'Learning how to program.'.
 WRITE: / 'gv_x   is', gv_x,
        / 'gv_str is', gv_str,
        / '<abc>  is', <abc>.  " now carries gv_str value
+ULINE.
+
+WRITE: / 'Changing <abc> value and printing data again.'.
+SKIP.
+
+<abc> = 'Field-symbol changed!'.
+
+WRITE: / 'gv_x   is', gv_x,
+       / 'gv_str is', gv_str,
+       / '<abc>  is', <abc>.  " now carries <abc> new value

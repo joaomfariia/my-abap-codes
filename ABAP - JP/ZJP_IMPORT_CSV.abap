@@ -7,19 +7,6 @@ REPORT zjp_import_csv.
 
 TYPES: ty_file TYPE c LENGTH 2000,
 
-       BEGIN OF ty_file_line,
-
-         zid     TYPE c LENGTH 3,
-         zdate   TYPE c LENGTH 8,
-         zstore  TYPE c LENGTH 3,
-         zcust   TYPE c LENGTH 20,
-         zstatus TYPE c LENGTH 1,
-         zuser   TYPE c LENGTH 20,
-         netwr   TYPE c LENGTH 15,
-         waerk   TYPE c LENGTH 5,
-
-       END OF ty_file_line,
-
        BEGIN OF ty_data,
 
          zid     TYPE ztab_attendances-zid,
@@ -38,9 +25,13 @@ DATA: gt_data TYPE STANDARD TABLE OF ty_data,
 
 DATA: gt_attend TYPE TABLE OF ztab_attendances.
 
-PARAMETERS: p_file TYPE rlgrap-filename DEFAULT 'C:\Users\joaof\Desktop\csv.csv'.
+SELECTION-SCREEN BEGIN OF BLOCK b0 WITH FRAME TITLE TEXT-001.
 
-PARAMETERS: p_header AS CHECKBOX DEFAULT abap_true.
+  PARAMETERS: p_file   TYPE rlgrap-filename DEFAULT 'C:\Users\joaof\Desktop\csv.csv',
+              p_header AS CHECKBOX DEFAULT abap_true,
+              p_job    AS CHECKBOX.
+
+SELECTION-SCREEN END OF BLOCK b0.
 
 AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_file.
 
@@ -53,7 +44,7 @@ START-OF-SELECTION.
     PERFORM f_process_data.
 
     IF sy-subrc EQ 0.
-      MESSAGE 'Dados inseridos com sucesso!' TYPE 'I' DISPLAY LIKE 'I'.
+      MESSAGE 'Records inserted correctly!' TYPE 'S'.
     ENDIF.
   ENDIF.
 
@@ -71,6 +62,7 @@ FORM f_open_file USING p_file TYPE rlgrap-filename.
   CALL METHOD cl_gui_frontend_services=>file_open_dialog
     EXPORTING
       window_title = 'Select a file'
+      file_filter = |csv (*.csv)\|*.csv\|{ cl_gui_frontend_services=>filetype_all } |
     CHANGING
       file_table   = lt_file[]
       rc           = lv_rc.
@@ -167,8 +159,6 @@ FORM f_process_data .
     MOVE-CORRESPONDING gt_data TO gt_attend.
     MODIFY ztab_attendances FROM TABLE @gt_attend.
     COMMIT WORK.
-
-    cl_demo_output=>display_data( gt_attend ).
 
   ELSE.
     MESSAGE 'No entries in the file.' TYPE 'E'.
