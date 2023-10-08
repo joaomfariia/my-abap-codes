@@ -1,5 +1,3 @@
 # My ABAP Codes
 
-As a new ABAP developer, I am trying to get better each day and going to post my learning evolution in this repository.
-
-The codes covers the basic concept and new syntax of the ABAP programming language.
+Hello there! 👋 I'm a new SAP ABAP developer, and this is where I'll be documenting my journey and progress in the world of SAP ABAP development.
